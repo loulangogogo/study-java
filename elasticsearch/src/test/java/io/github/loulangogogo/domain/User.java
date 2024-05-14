@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class User {
     private String name;
-    private int age;
+    private Integer age;
     private String phone;
     private String email;
     private String idCard;
