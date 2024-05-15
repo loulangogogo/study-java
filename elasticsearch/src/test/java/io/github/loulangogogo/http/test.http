@@ -1,0 +1,3 @@
+GET http://192.168.2.82:9200/dg_user/_search
+Authorization: ApiKey ZkVMelpvOEJmZk9ldWtBZnUyZFQ6M0NSaFZ2OWFUd0tMNjNWV3N1RlhXUQ==
+content-type: application/json
