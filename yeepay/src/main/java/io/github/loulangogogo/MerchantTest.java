@@ -1,0 +1,125 @@
+package io.github.loulangogogo;
+
+import com.yeepay.yop.sdk.exception.YopClientException;
+import com.yeepay.yop.sdk.service.mer.MerClient;
+import com.yeepay.yop.sdk.service.mer.MerClientBuilder;
+import com.yeepay.yop.sdk.service.mer.request.RegisterContributeMerchantV2Request;
+import com.yeepay.yop.sdk.service.mer.request.RegisterQueryV2Request;
+import com.yeepay.yop.sdk.service.mer.response.RegisterContributeMerchantV2Response;
+import com.yeepay.yop.sdk.service.mer.response.RegisterQueryV2Response;
+import com.yeepay.yop.sdk.service.sys.SysClient;
+import com.yeepay.yop.sdk.service.sys.SysClientBuilder;
+import com.yeepay.yop.sdk.service.sys.request.MerchantQualUploadRequest;
+import com.yeepay.yop.sdk.service.sys.response.MerchantQualUploadResponse;
+import io.gitee.loulan_yxq.owner.core.map.MapTool;
+import io.gitee.loulan_yxq.owner.core.tool.IdTool;
+import io.gitee.loulan_yxq.owner.json.tool.JsonTool;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.Map;
+
+public class MerchantTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MerchantTest.class);
+    private MerClient merclient = MerClientBuilder.builder().build();
+    private SysClient sysClient = SysClientBuilder.builder().build();
+
+    @Test
+    public void register() {
+        RegisterContributeMerchantV2Request request = new RegisterContributeMerchantV2Request();
+        request.setRequestNo("HLTQ-TYCM-"+IdTool.simpleUUID());
+        request.setBusinessRole("SETTLED_MERCHANT");
+
+        Map<String, Object> merchantSubjectInfo = MapTool.map();
+        merchantSubjectInfo.put("signType", "ENTERPRISE");
+        merchantSubjectInfo.put("licenceNo", "91140109MA0M3PL64W");
+        merchantSubjectInfo.put("licenceUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719386332984-a7c227cf-1d57-4ec2-b4b1-4b5152161484-yfBTAeCmXACNjjmhXVXK.jpg");
+        merchantSubjectInfo.put("signName", "太原瀚才传媒有限公司");
+        merchantSubjectInfo.put("shortName", "合力团气");
+        merchantSubjectInfo.put("openAccountLicenceUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389596850-b742b237-e2bf-4a23-9db0-33a3dc55eed8-rKzSMsiVeHnxGSoSVWpU.jpg");
+        request.setMerchantSubjectInfo(JsonTool.toJson(merchantSubjectInfo));
+
+        Map<String, Object> merchantCorporationInfo = MapTool.map();
+        merchantCorporationInfo.put("legalName", "成海兵");
+        merchantCorporationInfo.put("legalLicenceType", "ID_CARD");
+        merchantCorporationInfo.put("legalLicenceNo", "142326197906040119");
+        merchantCorporationInfo.put("legalLicenceFrontUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389232958-493bcdbe-fd91-4d63-b461-8a7deb9dce89-wuozVLBIHlZBsfJPMgsg.jpg");
+        merchantCorporationInfo.put("legalLicenceBackUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389257192-d424c29b-4ba9-4048-9a5e-2d235a233ae2-tdKFpBQPOfIsvwNKGQtW.jpg");
+        request.setMerchantCorporationInfo(JsonTool.toJson(merchantCorporationInfo));
+
+        Map<String, Object> merchantContactInfo = MapTool.map();
+        merchantContactInfo.put("contactName", "张海燕");
+        merchantContactInfo.put("contactLicenceNo", "142326198001170124");
+        merchantContactInfo.put("contactMobile", "17835149888");
+        merchantContactInfo.put("contactEmail", "597123920@qq.com ");
+        merchantContactInfo.put("servicePhone", "4009997658");
+        request.setMerchantContactInfo(JsonTool.toJson(merchantContactInfo));
+
+        Map<String, Object> businessAddressInfo = MapTool.map();
+        businessAddressInfo.put("province", "140000");
+        businessAddressInfo.put("city", "140100");
+        businessAddressInfo.put("district", "140109");
+        businessAddressInfo.put("address", "小井峪街道春居南路创客大厦701室");
+        request.setBusinessAddressInfo(JsonTool.toJson(businessAddressInfo));
+
+        Map<String, Object> settlementAccountInfo = MapTool.map();
+        settlementAccountInfo.put("settlementDirection", "ACCOUNT");
+        settlementAccountInfo.put("bankAccountType", "ENTERPRISE_ACCOUNT");
+        settlementAccountInfo.put("bankCardNo", "140521357485");
+        settlementAccountInfo.put("cnapsCode", "104161004487");
+        request.setSettlementAccountInfo(JsonTool.toJson(settlementAccountInfo));
+
+        request.setNotifyUrl("http://127.0.0.1");
+
+        Map<String, Object> productQualificationInfo = MapTool.map();
+        productQualificationInfo.put("paymentScene", "GYSDK");
+        productQualificationInfo.put("agreementPhotoUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719394892152-993ca505-0d3c-4647-a394-86adea3f9a79-nKktgrLnygPqPyeqtYrR.heic");
+
+        request.setProductQualificationInfo(JsonTool.toJson(productQualificationInfo));
+        try {
+            System.out.println(JsonTool.toJson(request));
+            RegisterContributeMerchantV2Response response = merclient.registerContributeMerchantV2(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            e.printStackTrace();
+        }
+
+        // {"headers":{},"requestNo":"HLTQ-TYCM-99ca8d228893408e80b69ccb826c52fd","businessRole":"SETTLED_MERCHANT","merchantSubjectInfo":"{\"licenceUrl\":\"http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719386332984-a7c227cf-1d57-4ec2-b4b1-4b5152161484-yfBTAeCmXACNjjmhXVXK.jpg\",\"signName\":\"太原瀚才传媒有限公司\",\"signType\":\"ENTERPRISE\",\"licenceNo\":\"91140109MA0M3PL64W\",\"shortName\":\"合力团气\",\"openAccountLicenceUrl\":\"http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389596850-b742b237-e2bf-4a23-9db0-33a3dc55eed8-rKzSMsiVeHnxGSoSVWpU.jpg\"}","merchantCorporationInfo":"{\"legalName\":\"成海兵\",\"legalLicenceNo\":\"142326197906040119\",\"legalLicenceBackUrl\":\"http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389257192-d424c29b-4ba9-4048-9a5e-2d235a233ae2-tdKFpBQPOfIsvwNKGQtW.jpg\",\"legalLicenceType\":\"ID_CARD\",\"legalLicenceFrontUrl\":\"http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389232958-493bcdbe-fd91-4d63-b461-8a7deb9dce89-wuozVLBIHlZBsfJPMgsg.jpg\"}","merchantContactInfo":"{\"contactMobile\":\"17835149888\",\"servicePhone\":\"4009997658\",\"contactEmail\":\"597123920@qq.com \",\"contactName\":\"张海燕\",\"contactLicenceNo\":\"142326198001170124\"}","businessAddressInfo":"{\"address\":\"小井峪街道春居南路食容大厦701室\",\"province\":\"140000\",\"city\":\"140100\",\"district\":\"140109\"}","settlementAccountInfo":"{\"bankAccountType\":\"ENTERPRISE_ACCOUNT\",\"bankCardNo\":\"140521357485\",\"settlementDirection\":\"ACCOUNT\",\"cnapsCode\":\"104161004487\"}","notifyUrl":"http://127.0.0.1","productQualificationInfo":"{\"paymentScene\":\"GYSDK\",\"agreementPhotoUrl\":\"http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719394892152-993ca505-0d3c-4647-a394-86adea3f9a79-nKktgrLnygPqPyeqtYrR.heic\"}","operationId":"registerContributeMerchantV2"}
+        // {"metadata":{"yopRequestId":"69170eea-eae1-4e7b-bbc7-1993714d83c4","yopSign":"qXnR6YVIH1jzcLQruOCU13RoMZ5VFUXB2q85ESUxoKm9ZoQrscMFiyxfz/n2ZBx2rOrs1/SOJWwTDtTOVocYng8YR6uPbrB59e+jlYSDYeVltMLs4dxF6woqkD2SQ27HYMztB7oxzo+2rPBY2NlsbmWar0NtMR5KjQhhYISXxr9Yi8ZJqUOP6LmkEYRYz31faiOg0KQcZu/RGKHWk6Z0B/7X63evXwxCCNozY8l2YgvJS858GiptnkIn9umrfjRNwsIeSYm2VEAp/Ic7AAqUETBivqcz6c9Oa+jd/TUUWmiK9ocQWpQzw2chsejys2Sm46x8sfGoNixA4dyHGJQ2IA==","contentLength":275,"contentType":"application/json;charset=UTF-8","date":"2024-06-26T17:44:11.000+08:00","server":"elb"},"result":{"returnCode":"NIG00000","returnMsg":"请求成功","requestNo":"HLTQ-TYCM-99ca8d228893408e80b69ccb826c52fd","applicationNo":"TYSHRW20240626174411214720","applicationStatus":"REVIEWING","merchantNo":"10090439828"}}
+
+        // {"metadata":{"yopRequestId":"53cac5d5-9eac-478a-ad13-f919001f61a6","yopSign":"NfRDf6Zv27pVonX+vb0tu46r3dfYexkI7YVDAku+B2C+vOzGQ/yYYPtVEaYwurjfcsPdfT5dz8weUXhEV5vY17rljSIC4hs4NzTncaePrKlJ1zMUqxHlHUevOtdlpyEWwgMmXTp5mNjyzstEN870cIgh0bH0Fv9wBd7adt0hqOW1EvqKwT6ZlxSuggjI784MVXCh0e2t2Cvh2ZjKW+rO8V5mMUGT9gleWrZ+S+waT1YQ/4HB7wbYS9ZodqpK3iCP0moK+X1egkrKr9vUlkvIeg3531nPjZxAp7jJFyrWTxluyKsZWMpbcI2PF3nXaN84HaLixLSqzR4A9hA/PR9qEg==","contentLength":275,"contentType":"application/json;charset=UTF-8","date":"2024-06-26T18:13:49.000+08:00","server":"nginx"},"result":{"returnCode":"NIG00000","returnMsg":"请求成功","requestNo":"HLTQ-TYCM-45292293638b42bb95dcb5e9a138645c","applicationNo":"TYSHRW20240626181349280163","applicationStatus":"REVIEWING","merchantNo":"10090439922"}}
+    }
+
+    @Test
+    public void registerQuery() {
+        RegisterQueryV2Request request = new RegisterQueryV2Request();
+        request.setRequestNo("HLTQ-TYCM-99ca8d228893408e80b69ccb826c52fd");
+        try {
+            RegisterQueryV2Response response = merclient.registerQueryV2(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void upload() {
+        // 营业执照： http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719386332984-a7c227cf-1d57-4ec2-b4b1-4b5152161484-yfBTAeCmXACNjjmhXVXK.jpg
+        // 正面: http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389232958-493bcdbe-fd91-4d63-b461-8a7deb9dce89-wuozVLBIHlZBsfJPMgsg.jpg
+        // 反面：http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389257192-d424c29b-4ba9-4048-9a5e-2d235a233ae2-tdKFpBQPOfIsvwNKGQtW.jpg
+        // 开户：http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389596850-b742b237-e2bf-4a23-9db0-33a3dc55eed8-rKzSMsiVeHnxGSoSVWpU.jpg
+        // 授权： http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719394892152-993ca505-0d3c-4647-a394-86adea3f9a79-nKktgrLnygPqPyeqtYrR.heic
+        MerchantQualUploadRequest request = new MerchantQualUploadRequest();
+        request.setMerQual(new File("file/sq.jpg"));
+        try {
+            MerchantQualUploadResponse response = sysClient.merchantQualUpload(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -20,8 +20,19 @@
     <dependencies>
         <dependency>
             <groupId>com.yeepay.yop.sdk</groupId>
-            <artifactId>yop-java-sdk</artifactId>
-            <version>4.4.11</version>
+            <artifactId>yop-java-sdk-biz</artifactId>
+            <version>4.4.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.gitee.loulan_yxq</groupId>
+            <artifactId>owner-all</artifactId>
+            <version>1.4.2.3</version>
         </dependency>
     </dependencies>
 </project>
