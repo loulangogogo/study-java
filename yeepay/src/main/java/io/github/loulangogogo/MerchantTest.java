@@ -4,8 +4,10 @@ import com.yeepay.yop.sdk.exception.YopClientException;
 import com.yeepay.yop.sdk.service.mer.MerClient;
 import com.yeepay.yop.sdk.service.mer.MerClientBuilder;
 import com.yeepay.yop.sdk.service.mer.request.RegisterContributeMerchantV2Request;
+import com.yeepay.yop.sdk.service.mer.request.RegisterContributeMicroV2Request;
 import com.yeepay.yop.sdk.service.mer.request.RegisterQueryV2Request;
 import com.yeepay.yop.sdk.service.mer.response.RegisterContributeMerchantV2Response;
+import com.yeepay.yop.sdk.service.mer.response.RegisterContributeMicroV2Response;
 import com.yeepay.yop.sdk.service.mer.response.RegisterQueryV2Response;
 import com.yeepay.yop.sdk.service.sys.SysClient;
 import com.yeepay.yop.sdk.service.sys.SysClientBuilder;
@@ -14,19 +16,20 @@ import com.yeepay.yop.sdk.service.sys.response.MerchantQualUploadResponse;
 import io.gitee.loulan_yxq.owner.core.map.MapTool;
 import io.gitee.loulan_yxq.owner.core.tool.IdTool;
 import io.gitee.loulan_yxq.owner.json.tool.JsonTool;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
 import java.util.Map;
 
 public class MerchantTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MerchantTest.class);
-    private MerClient merclient = MerClientBuilder.builder().build();
-    private SysClient sysClient = SysClientBuilder.builder().build();
+    private static final MerClient merclient = MerClientBuilder.builder().build();
+    private static final SysClient sysClient = SysClientBuilder.builder().build();
 
     @Test
     public void register() {
@@ -95,9 +98,54 @@ public class MerchantTest {
     }
 
     @Test
+    public void registerByPeople() {
+        RegisterContributeMicroV2Request request = new RegisterContributeMicroV2Request();
+        request.setRequestNo("TEST-" + IdTool.simpleUUID());
+        request.setBusinessRole("SETTLED_MERCHANT");
+
+        Map<String, Object> merchantSubjectInfo = MapTool.map();
+        merchantSubjectInfo.put("signName", "测试人员");
+        merchantSubjectInfo.put("shortName", "测试");
+        request.setMerchantSubjectInfo(JsonTool.toJson(merchantSubjectInfo));
+
+        Map<String, Object> merchantCorporationInfo = MapTool.map();
+        merchantCorporationInfo.put("mobile", "18509376997");
+        merchantCorporationInfo.put("legalLicenceType", "ID_CARD");
+        merchantCorporationInfo.put("legalLicenceNo", "142326197906040119");
+        merchantCorporationInfo.put("legalLicenceFrontUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389232958-493bcdbe-fd91-4d63-b461-8a7deb9dce89-wuozVLBIHlZBsfJPMgsg.jpg");
+        merchantCorporationInfo.put("legalLicenceBackUrl", "http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389257192-d424c29b-4ba9-4048-9a5e-2d235a233ae2-tdKFpBQPOfIsvwNKGQtW.jpg");
+        request.setMerchantCorporationInfo(JsonTool.toJson(merchantCorporationInfo));
+
+        Map<String, Object> businessAddressInfo = MapTool.map();
+        businessAddressInfo.put("province", "140000");
+        businessAddressInfo.put("city", "140100");
+        businessAddressInfo.put("district", "140109");
+        businessAddressInfo.put("address", "小井峪街道春居南路创客大厦701室");
+        request.setBusinessAddressInfo(JsonTool.toJson(businessAddressInfo));
+
+        Map<String, Object> settlementAccountInfo = MapTool.map();
+        settlementAccountInfo.put("settlementDirection", "BANKCARD");
+        settlementAccountInfo.put("bankAccountType", "DEBIT_CARD");
+        settlementAccountInfo.put("bankCardNo", "123456789456");
+        settlementAccountInfo.put("cnapsCode", "104161004487");
+        request.setAccountInfo(JsonTool.toJson(settlementAccountInfo));
+
+        request.setNotifyUrl("http://127.0.0.1");
+        try {
+            RegisterContributeMicroV2Response response = merclient.registerContributeMicroV2(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            e.printStackTrace();
+        }
+
+        // TEST-524fce5b617143d0998f9f3d9cc701e4
+    }
+
+    @Test
     public void registerQuery() {
         RegisterQueryV2Request request = new RegisterQueryV2Request();
-        request.setRequestNo("HLTQ-TYCM-99ca8d228893408e80b69ccb826c52fd");
+//        request.setRequestNo("HLTQ-TYCM-99ca8d228893408e80b69ccb826c52fd");
+        request.setRequestNo("TEST-524fce5b617143d0998f9f3d9cc701e4");
         try {
             RegisterQueryV2Response response = merclient.registerQueryV2(request);
             System.out.println(JsonTool.toJson(response));
@@ -107,19 +155,34 @@ public class MerchantTest {
     }
 
     @Test
-    public void upload() {
+    public void upload() throws IOException {
         // 营业执照： http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719386332984-a7c227cf-1d57-4ec2-b4b1-4b5152161484-yfBTAeCmXACNjjmhXVXK.jpg
         // 正面: http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389232958-493bcdbe-fd91-4d63-b461-8a7deb9dce89-wuozVLBIHlZBsfJPMgsg.jpg
         // 反面：http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389257192-d424c29b-4ba9-4048-9a5e-2d235a233ae2-tdKFpBQPOfIsvwNKGQtW.jpg
         // 开户：http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719389596850-b742b237-e2bf-4a23-9db0-33a3dc55eed8-rKzSMsiVeHnxGSoSVWpU.jpg
         // 授权： http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719394892152-993ca505-0d3c-4647-a394-86adea3f9a79-nKktgrLnygPqPyeqtYrR.heic
         MerchantQualUploadRequest request = new MerchantQualUploadRequest();
-        request.setMerQual(new File("file/sq.jpg"));
+
+        FileInputStream inputStream = new FileInputStream("file/tycm_zjz.jpg");
+        File tempFile = File.createTempFile(IdTool.simpleUUID(), "");
+        FileUtils.copyInputStreamToFile(inputStream, tempFile);
+
+        request.setMerQual(tempFile);
         try {
             MerchantQualUploadResponse response = sysClient.merchantQualUpload(request);
             System.out.println(JsonTool.toJson(response));
         } catch (YopClientException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test() throws IOException {
+        FileInputStream inputStream = new FileInputStream("file/tycm_zjz.jpg");
+        File tempFile = File.createTempFile(IdTool.simpleUUID(), "");
+        FileUtils.copyInputStreamToFile(inputStream, tempFile);
+        FileOutputStream outputStream = new FileOutputStream("file/ss.jpg");
+        FileUtils.copyFile(tempFile, outputStream);
+
     }
 }
