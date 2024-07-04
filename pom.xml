@@ -12,6 +12,7 @@
         <module>elasticsearch</module>
         <module>test</module>
         <module>yeepay</module>
+        <module>quartz</module>
     </modules>
 
     <properties>
@@ -31,5 +32,27 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>io.gitee.loulan_yxq</groupId>
+            <artifactId>owner-all</artifactId>
+            <version>1.4.2.3</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!--maven编译版本管理-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

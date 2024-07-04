@@ -1,0 +1,40 @@
+spring:
+  quartz:
+    scheduler-name: quartzScheduler
+    job-store-type: jdbc
+    jdbc:
+      platform: postgresql
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            misfireThreshold: 5000
+            isClustered: true
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+
+  datasource:
+    url: jdbc:postgresql://192.168.2.83:5432/quartz-test?allowMultiQueries=true
+    username: quartz
+    password: 8e00ba97ff904bd0bb046beb02ee63c6
+    driver-class-name: org.postgresql.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 连接池中最大连接数
+      maxActive: 2000
+      # 初始化大小
+      initialSize: 5
+      # 获取连接等待超时得最大时间
+      maxWait: 60000
+      # 连接池的最小连接数
+      minIdle: 5
+      # 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+
