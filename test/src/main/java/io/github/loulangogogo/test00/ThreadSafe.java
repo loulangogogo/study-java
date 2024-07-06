@@ -1,4 +1,4 @@
-package io.github.loulangogogo;
+package io.github.loulangogogo.test00;
 
 import io.gitee.loulan_yxq.owner.core.collection.CollTool;
 import org.junit.Before;
