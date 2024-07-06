@@ -38,6 +38,44 @@ public class TestConfiguration {
     }
 
 //    @PostConstruct
+    public void test01() throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey("simple"+IdTool.simpleUUID());
+        JobDetail jobDetail = JobBuilder.newJob(TestJob.class)
+                .withIdentity(jobKey)
+                .build();
+
+        SimpleTrigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(TriggerKey.triggerKey(jobKey.getName(), jobKey.getGroup()))
+                .withSchedule(
+                        SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInSeconds(3)
+                                .repeatForever()
+                                .withMisfireHandlingInstructionFireNow()
+                ).build();
+
+        scheduler.scheduleJob(jobDetail, trigger);
+    }
+
+    @PostConstruct
+    public void test02() throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey("Calendar"+IdTool.simpleUUID());
+        JobDetail jobDetail = JobBuilder.newJob(TestJob.class)
+                .withIdentity(jobKey)
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(TriggerKey.triggerKey(jobKey.getName(), jobKey.getGroup()))
+                .withSchedule(
+                        CalendarIntervalScheduleBuilder.calendarIntervalSchedule()
+                                .withIntervalInSeconds(2)
+                                .withMisfireHandlingInstructionDoNothing()
+                ).build();
+
+        scheduler.scheduleJob(jobDetail, trigger);
+    }
+
+
+//    @PostConstruct
     public void delete() throws SchedulerException, InterruptedException {
         Set<JobKey> jobKeys = scheduler.getJobKeys(GroupMatcher.anyGroup());
 
@@ -49,11 +87,5 @@ public class TestConfiguration {
                 throw new RuntimeException(e);
             }
         });
-    }
-
-//    @PostConstruct
-    public void test02() throws SchedulerException {
-        boolean b = scheduler.checkExists(JobKey.jobKey("job1"));
-        System.err.println(b);
     }
 }

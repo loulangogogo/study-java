@@ -1,18 +1,26 @@
 spring:
   quartz:
+    # 调度标识名 集群中每一个实例都必须使用相同的名称
     scheduler-name: quartzScheduler
+    # 集群模式
     job-store-type: jdbc
     jdbc:
+      # 数据库平台
       platform: postgresql
+      # 是否初始化数据库表
       initialize-schema: never
     properties:
       org:
         quartz:
           scheduler:
+            # 集群每个节点的实例ID设置为自动获取 每一个必须不同
             instanceId: AUTO
           jobStore:
-            misfireThreshold: 5000
+            # 小于10秒都不算触发器超市，大于10为执行，那么就按照超时策略处理
+            misfireThreshold: 10000
+            # 是否集群
             isClustered: true
+            # 数据库代理类
             driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
 
   datasource:
