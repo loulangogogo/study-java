@@ -28,5 +28,10 @@
             <artifactId>owner-all</artifactId>
             <version>1.4.2.3</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.22</version>
+        </dependency>
     </dependencies>
 </project>
