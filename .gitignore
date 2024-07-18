@@ -36,3 +36,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/yeepay/src/main/resources/config/yop_sdk_config_default.json

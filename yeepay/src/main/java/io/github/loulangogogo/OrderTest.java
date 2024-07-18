@@ -44,7 +44,7 @@ public class OrderTest {
         request.setGoodsName("测试交易");
         request.setFundProcessType("REAL_TIME");
         request.setPayWay("USER_SCAN");
-        request.setChannel("WECHAT");
+        request.setChannel("ALIPAY");
         request.setScene("OFFLINE");
 //        request.setAppId("appId12345");
 //        request.setUserId("userId12345");
