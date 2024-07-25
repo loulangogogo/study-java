@@ -3,12 +3,8 @@ package io.github.loulangogogo;
 import com.yeepay.yop.sdk.exception.YopClientException;
 import com.yeepay.yop.sdk.service.mer.MerClient;
 import com.yeepay.yop.sdk.service.mer.MerClientBuilder;
-import com.yeepay.yop.sdk.service.mer.request.RegisterContributeMerchantV2Request;
-import com.yeepay.yop.sdk.service.mer.request.RegisterContributeMicroV2Request;
-import com.yeepay.yop.sdk.service.mer.request.RegisterQueryV2Request;
-import com.yeepay.yop.sdk.service.mer.response.RegisterContributeMerchantV2Response;
-import com.yeepay.yop.sdk.service.mer.response.RegisterContributeMicroV2Response;
-import com.yeepay.yop.sdk.service.mer.response.RegisterQueryV2Response;
+import com.yeepay.yop.sdk.service.mer.request.*;
+import com.yeepay.yop.sdk.service.mer.response.*;
 import com.yeepay.yop.sdk.service.sys.SysClient;
 import com.yeepay.yop.sdk.service.sys.SysClientBuilder;
 import com.yeepay.yop.sdk.service.sys.request.MerchantQualUploadRequest;
@@ -23,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MerchantTest {
@@ -30,6 +27,53 @@ public class MerchantTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(MerchantTest.class);
     private static final MerClient merclient = MerClientBuilder.builder().build();
     private static final SysClient sysClient = SysClientBuilder.builder().build();
+
+
+    /**
+     * 商户变更
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
+    @Test
+    public void modify(){
+        ProductFeeModifyV2Request request = new ProductFeeModifyV2Request();
+        request.setRequestNo("FIX-"+IdTool.simpleUUID());
+        request.setParentMerchantNo("10090423999");
+        request.setMerchantNo("10090439828");
+        request.setNotifyUrl("127.0.0.1");
+//        request.setProductInfo("[{\"productCode\":\"MERCHANT_SCAN_ALIPAY_OFFLINE\",\"rateType\":\"SINGLE_PERCENT\",\"percentRate\":\"0.1\",\"undertaker\":\"PLATFORM_MERCHANT\",\"paymentMethod\":\"REAL_TIME\"}]");
+//        request.setProductQualificationInfo("{\"mcc\":\"7829\",\"paymentScene\":\"RLZYFW\",\"systemScreenshotUrl\":\"https://staticres.yeepay.com/xxx.文件后缀\",\"specialPermitProcessUrl\":\"https://staticres.yeepay.com/xxx.文件后缀\",\"agreementPhotoUrl\":\"https://staticres.yeepay.com/xxx.文件后缀\"}");
+//        request.setSettlementAccountInfo("{ \"settlementDirection\":\"结算方向\", \"bankCode\":\"开户总行编码\", \"bankAccountType\":\"银行账户类型\", \"bankCardNo\":\"银行账户号码\" }");
+        request.setFunctionService("[\"SHARE\"]");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("shareScene", "FZ_ALL001");
+//        map.put("alipayBackupCount", 20);
+//        map.put("wechatBackupCount", 20);
+        request.setFunctionServiceQualificationInfo(JsonTool.toJson(map));
+        try {
+            ProductFeeModifyV2Response response = merclient.productFeeModifyV2(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            LOGGER.error("Exception when calling MerClient#productFeeModifyV2, ex:", e);
+        }
+
+        // {"metadata":{"yopRequestId":"90abbe8a-4444-4b83-ae96-0350ab778061","yopSign":"r/7PjKryoRloXpqaR48AiZ0jCXeblV6w3WCEvNa6xmNa3BTjnKwQkvszS9dJcLTfvz9RdAK5ZYdVZs5JAFFSdBf488Xg7NxnI0CZkrKI+IrYmK6MSWH+bU20lwOYC/x0lBitzpH0bxINWOqRptsfZpd5i/C+jkoP8kthYbfs1FIg5DsdtS+bI03IiN4OnnqiP/INd8vhROLFM/BwmUfMAyHzh0QA+3PlElSWntCLQvTbStNpUdCz+2gVuv0bC3bZrvNfswbqesj2aR150gFiuwck9mkMbLtoQzYY0A5Lm0bIdr5QftHhvbWJQ4jdr1e5iV6bRHWnri91ziqO2nyaTw==","contentLength":269,"contentType":"application/json;charset=UTF-8","date":"2024-07-24T16:23:33.000+08:00","server":"nginx"},"result":{"returnCode":"NIG00000","returnMsg":"请求成功","requestNo":"FIX-0f873433b7db49749458e5dddab60c8e","applicationNo":"CPBGLC20240724162333260949","applicationStatus":"REVIEWING","merchantNo":"10090439828"}}
+    }
+
+    @Test
+    public void modifyQuery() {
+        ProductModifyQueryV2Request request = new ProductModifyQueryV2Request();
+        request.setRequestNo("FIX-0f873433b7db49749458e5dddab60c8e");
+        try {
+            ProductModifyQueryV2Response response = merclient.productModifyQueryV2(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            LOGGER.error("Exception when calling MerClient#productModifyQueryV2, ex:", e);
+        }
+    }
 
     @Test
     public void register() {

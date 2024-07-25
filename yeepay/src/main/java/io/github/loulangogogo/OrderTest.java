@@ -7,8 +7,16 @@ import com.yeepay.yop.sdk.service.aggpay.request.PayLinkRequest;
 import com.yeepay.yop.sdk.service.aggpay.request.PrePayRequest;
 import com.yeepay.yop.sdk.service.aggpay.response.PayLinkResponse;
 import com.yeepay.yop.sdk.service.aggpay.response.PrePayResponse;
+import com.yeepay.yop.sdk.service.divide.DivideClient;
+import com.yeepay.yop.sdk.service.divide.DivideClientBuilder;
+import com.yeepay.yop.sdk.service.divide.request.ApplyRequest;
+import com.yeepay.yop.sdk.service.divide.response.ApplyResponse;
 import com.yeepay.yop.sdk.service.mer.MerClient;
 import com.yeepay.yop.sdk.service.mer.MerClientBuilder;
+import com.yeepay.yop.sdk.service.promtion.PromtionClient;
+import com.yeepay.yop.sdk.service.promtion.PromtionClientBuilder;
+import com.yeepay.yop.sdk.service.promtion.request.SubsidyApplyRequest;
+import com.yeepay.yop.sdk.service.promtion.response.SubsidyApplyResponse;
 import com.yeepay.yop.sdk.service.sys.SysClient;
 import com.yeepay.yop.sdk.service.sys.SysClientBuilder;
 import io.gitee.loulan_yxq.owner.core.tool.IdTool;
@@ -18,6 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*********************************************************
  ** 订单测试
@@ -33,18 +45,23 @@ public class OrderTest {
     private static final SysClient sysClient = SysClientBuilder.builder().build();
     // 该Client线程安全，请使用单例模式，多次请求共用
     private static final AggpayClient api = AggpayClientBuilder.builder().build();
+
+    // 该Client线程安全，请使用单例模式，多次请求共用
+    private static final DivideClient divideClient = DivideClientBuilder.builder().build();
+
+    private static final PromtionClient promtionClient = PromtionClientBuilder.builder().build();
     @Test
     public void orderApply() {
         PrePayRequest request = new PrePayRequest();
         // 10090423999
-        request.setParentMerchantNo("10090439828");
+        request.setParentMerchantNo("10090423999");
         request.setMerchantNo("10090439828");
         request.setOrderId("TEST-"+ IdTool.simpleUUID());
         request.setOrderAmount(new BigDecimal("0.01"));
 //        request.setNotifyUrl("https://notify.merchant.com/xxx");
         request.setMemo("测试数据");
         request.setGoodsName("测试交易");
-        request.setFundProcessType("REAL_TIME");
+        request.setFundProcessType("DELAY_SETTLE");
         request.setPayWay("USER_SCAN");
         request.setChannel("WECHAT");
         request.setScene("OFFLINE");
@@ -81,18 +98,25 @@ public class OrderTest {
         }
     }
 
+    /**
+     * yibao
+     * @param       
+     * @return
+     * @exception  
+     * @author     :loulan
+     * */
     @Test
     public void orderApply2() {
         PayLinkRequest request = new PayLinkRequest();
-        request.setParentMerchantNo("10090439828");
+        request.setParentMerchantNo("10090423999");
         request.setMerchantNo("10090439828");
         request.setOrderId("TEST-"+ IdTool.simpleUUID());
-        request.setOrderAmount(new BigDecimal("0.01"));
-        request.setExpiredTime("2024-07-23 19:52:21");
+        request.setOrderAmount(new BigDecimal("0.03"));
+        request.setExpiredTime("2024-07-24 23:52:21");
 //        request.setNotifyUrl("127.0.0.1");
         request.setMemo("测试数据");
         request.setGoodsName("测试支付");
-        request.setFundProcessType("REAL_TIME");
+        request.setFundProcessType("DELAY_SETTLE");
         request.setScene("{\"WECHAT\":\"OFFLINE\",\"ALIPAY\":\"OFFLINE\"}");
 //        request.setAppId("appId12345");
 //        request.setChannelSpecifiedInfo("{\"hbFqNum\":\"3\",\"hbFqSellerPercent\":\"0\",\"sysServiceProviderId\":\"\",\"isEnterprisePay\":\"N\"}");
@@ -100,7 +124,13 @@ public class OrderTest {
 //        request.setIdentityInfo("{\"identityVerifyType\":\"Y\",\"payerIdType\":\"IDENTITY_CARD\",\"payerNumber\":\"234512198006252456\",\"payerName\":\"名字\"}");
 //        request.setLimitCredit("N");
 //        request.setCsUrl("csUrl_example");
-//        request.setYpPromotionInfo("自定义支付立减：[{\"amount\":\"0.01\",\"type\":\"CUSTOM_REDUCTION\"}],自定义补贴商户[{\"type\":\"CUSTOM_ALLOWANCE\"}]");
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> promotion = new HashMap<>();
+        promotion.put("type", "CUSTOM_REDUCTION");
+        promotion.put("amount", 0.01);
+        list.add(promotion);
+
+        request.setYpPromotionInfo(JsonTool.toJson(list));
 //        request.setBusinessInfo("businessInfo_example");
 //        request.setToken("83BCDF29CFACB4411533080B67864EF8C907CCDC5E10A707C285FEA10CDB8221");
 //        request.setYpAccountBookNo("ypAccountBookNo_example");
@@ -113,6 +143,67 @@ public class OrderTest {
             System.out.println(JsonTool.toJson(response));
         } catch (YopClientException e) {
             LOGGER.error("Exception when calling AggpayClient#payLink, ex:", e);
+        }
+    }
+
+    /**
+     * 营销补贴
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
+    @Test
+    public void subsidy() {
+        SubsidyApplyRequest request = new SubsidyApplyRequest();
+        request.setOrderId("TEST-36649cdd72fc49ee84b702052bca7da0");
+        request.setUniqueOrderNo("1013202407240000013143941851");
+        request.setSubsidyRequestId("SUB-"+IdTool.simpleUUID());
+        request.setSubsidyAmount("0.01");
+        request.setAssumeMerchantNo("10090423999");
+        request.setMemo("测试补贴");
+        request.setParentMerchantNo("10090423999");
+        request.setMerchantNo("10090439828");
+        try {
+            SubsidyApplyResponse response = promtionClient.subsidyApply(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            LOGGER.error("Exception when calling PromtionClient#subsidyApply, ex:", e);
+        }
+    }
+
+    /**
+     * 分账申请
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
+    @Test
+    public void divide01() {
+        ApplyRequest request = new ApplyRequest();
+        request.setParentMerchantNo("10090423999");
+        request.setMerchantNo("10090439828");
+        request.setOrderId("TEST-750ab05a40ef4f05b5dcf2bc66b583c6");
+        request.setUniqueOrderNo("1013202407240000013143747940");
+        request.setDivideRequestId("DIVI-"+IdTool.simpleUUID());
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("ledgerNo", "10090423999");
+        map.put("amount", 0.01);
+        map.put("divideDetailDesc", "分账测试");
+        map.put("ledgerType", "MERCHANT2MERCHANT");
+        list.add(map);
+
+        request.setDivideDetail(JsonTool.toJson(list));
+//        request.setAccountLinkInfo("{\"serviceProvider\":\"YEEPAY\",\"ipAddress\":\"192.168.1.1\",\"divideType\":\"1\",\"token\":\"token\"}");
+//        request.setIsUnfreezeResidualAmount("isUnfreezeResidualAmount_example");
+        try {
+            ApplyResponse response = divideClient.apply(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            LOGGER.error("Exception when calling DivideClient#apply, ex:", e);
         }
     }
 }
