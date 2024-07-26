@@ -30,7 +30,7 @@ public class MerchantTest {
 
 
     /**
-     * 商户变更
+     * 商户信息变更
      * @param
      * @return
      * @exception
@@ -63,6 +63,13 @@ public class MerchantTest {
         // {"metadata":{"yopRequestId":"90abbe8a-4444-4b83-ae96-0350ab778061","yopSign":"r/7PjKryoRloXpqaR48AiZ0jCXeblV6w3WCEvNa6xmNa3BTjnKwQkvszS9dJcLTfvz9RdAK5ZYdVZs5JAFFSdBf488Xg7NxnI0CZkrKI+IrYmK6MSWH+bU20lwOYC/x0lBitzpH0bxINWOqRptsfZpd5i/C+jkoP8kthYbfs1FIg5DsdtS+bI03IiN4OnnqiP/INd8vhROLFM/BwmUfMAyHzh0QA+3PlElSWntCLQvTbStNpUdCz+2gVuv0bC3bZrvNfswbqesj2aR150gFiuwck9mkMbLtoQzYY0A5Lm0bIdr5QftHhvbWJQ4jdr1e5iV6bRHWnri91ziqO2nyaTw==","contentLength":269,"contentType":"application/json;charset=UTF-8","date":"2024-07-24T16:23:33.000+08:00","server":"nginx"},"result":{"returnCode":"NIG00000","returnMsg":"请求成功","requestNo":"FIX-0f873433b7db49749458e5dddab60c8e","applicationNo":"CPBGLC20240724162333260949","applicationStatus":"REVIEWING","merchantNo":"10090439828"}}
     }
 
+    /**
+     * 商户信息变更查询
+     * @param       
+     * @return
+     * @exception  
+     * @author     :loulan
+     * */
     @Test
     public void modifyQuery() {
         ProductModifyQueryV2Request request = new ProductModifyQueryV2Request();
@@ -75,6 +82,13 @@ public class MerchantTest {
         }
     }
 
+    /**
+     * 商户注册
+     * @param       
+     * @return
+     * @exception  
+     * @author     :loulan
+     * */
     @Test
     public void register() {
         RegisterContributeMerchantV2Request request = new RegisterContributeMerchantV2Request();
@@ -141,6 +155,13 @@ public class MerchantTest {
         // {"metadata":{"yopRequestId":"53cac5d5-9eac-478a-ad13-f919001f61a6","yopSign":"NfRDf6Zv27pVonX+vb0tu46r3dfYexkI7YVDAku+B2C+vOzGQ/yYYPtVEaYwurjfcsPdfT5dz8weUXhEV5vY17rljSIC4hs4NzTncaePrKlJ1zMUqxHlHUevOtdlpyEWwgMmXTp5mNjyzstEN870cIgh0bH0Fv9wBd7adt0hqOW1EvqKwT6ZlxSuggjI784MVXCh0e2t2Cvh2ZjKW+rO8V5mMUGT9gleWrZ+S+waT1YQ/4HB7wbYS9ZodqpK3iCP0moK+X1egkrKr9vUlkvIeg3531nPjZxAp7jJFyrWTxluyKsZWMpbcI2PF3nXaN84HaLixLSqzR4A9hA/PR9qEg==","contentLength":275,"contentType":"application/json;charset=UTF-8","date":"2024-06-26T18:13:49.000+08:00","server":"nginx"},"result":{"returnCode":"NIG00000","returnMsg":"请求成功","requestNo":"HLTQ-TYCM-45292293638b42bb95dcb5e9a138645c","applicationNo":"TYSHRW20240626181349280163","applicationStatus":"REVIEWING","merchantNo":"10090439922"}}
     }
 
+    /**
+     * 小微个人商户注册
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
     @Test
     public void registerByPeople() {
         RegisterContributeMicroV2Request request = new RegisterContributeMicroV2Request();
@@ -185,6 +206,13 @@ public class MerchantTest {
         // TEST-524fce5b617143d0998f9f3d9cc701e4
     }
 
+    /**
+     * 商户注册情况查询
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
     @Test
     public void registerQuery() {
         RegisterQueryV2Request request = new RegisterQueryV2Request();
@@ -198,6 +226,13 @@ public class MerchantTest {
         }
     }
 
+    /**
+     * 文件图片上传
+     * @param
+     * @return
+     * @exception
+     * @author     :loulan
+     * */
     @Test
     public void upload() throws IOException {
         // 营业执照： http://staticres.yeepay.com/jcptb-merchant-netinjt05/2024/06/26/merchant-1719386332984-a7c227cf-1d57-4ec2-b4b1-4b5152161484-yfBTAeCmXACNjjmhXVXK.jpg
@@ -218,15 +253,5 @@ public class MerchantTest {
         } catch (YopClientException e) {
             e.printStackTrace();
         }
-    }
-
-    @Test
-    public void test() throws IOException {
-        FileInputStream inputStream = new FileInputStream("file/tycm_zjz.jpg");
-        File tempFile = File.createTempFile(IdTool.simpleUUID(), "");
-        FileUtils.copyInputStreamToFile(inputStream, tempFile);
-        FileOutputStream outputStream = new FileOutputStream("file/ss.jpg");
-        FileUtils.copyFile(tempFile, outputStream);
-
     }
 }

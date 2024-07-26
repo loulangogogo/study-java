@@ -1,6 +1,10 @@
 package io.github.loulangogogo;
 
 import com.yeepay.yop.sdk.exception.YopClientException;
+import com.yeepay.yop.sdk.service.account.AccountClient;
+import com.yeepay.yop.sdk.service.account.AccountClientBuilder;
+import com.yeepay.yop.sdk.service.account.request.TransferB2bOrderRequest;
+import com.yeepay.yop.sdk.service.account.response.TransferB2bOrderResponse;
 import com.yeepay.yop.sdk.service.aggpay.AggpayClient;
 import com.yeepay.yop.sdk.service.aggpay.AggpayClientBuilder;
 import com.yeepay.yop.sdk.service.aggpay.request.PayLinkRequest;
@@ -50,6 +54,45 @@ public class OrderTest {
     private static final DivideClient divideClient = DivideClientBuilder.builder().build();
 
     private static final PromtionClient promtionClient = PromtionClientBuilder.builder().build();
+    // 该Client线程安全，请使用单例模式，多次请求共用
+    private static final AccountClient accountClient = AccountClientBuilder.builder().build();
+
+    /**
+     * 商户之间的转账，包括营销账户和手续费账户
+     * @param       
+     * @return
+     * @exception  
+     * @author     :loulan
+     * */
+    @Test
+   public void b2bApply() {
+        TransferB2bOrderRequest request = new TransferB2bOrderRequest();
+        request.setParentMerchantNo("10090423999");
+        request.setRequestNo("B2B-"+ IdTool.simpleUUID());
+        request.setFromMerchantNo("10090423999");
+        request.setToMerchantNo("10090423999");
+        request.setToAccountType("MARKET_ACCOUNT");
+        request.setOrderAmount("0.01");
+        request.setUsage("测试转账");
+//        request.setFeeChargeSide("当商户承担且计费方式为预付实扣或后收时，不支持转入方承担；当平台商或服务商承担时无需指定此手续费承担方；");
+//        request.setNotifyUrl("notifyUrl_example");
+//        request.setRiskInfo("riskInfo_example");
+//        request.setToAccountNo("toAccountNo_example");
+        try {
+            TransferB2bOrderResponse response = accountClient.transferB2bOrder(request);
+            System.out.println(JsonTool.toJson(response));
+        } catch (YopClientException e) {
+            LOGGER.error("Exception when calling AccountClient#transferB2bOrder, ex:", e);
+        }
+   }
+
+    /**
+     * 聚合支付消费申请统一下单
+     * @param       
+     * @return
+     * @exception  
+     * @author     :loulan
+     * */
     @Test
     public void orderApply() {
         PrePayRequest request = new PrePayRequest();
@@ -90,6 +133,12 @@ public class OrderTest {
 //        request.setFeeSubsidyInfo("[{\"subsidyMerchantNo\":\"10080009498\",\"subsidyAccountType\":\"FEE_ACCOUNT\",\"subsidyType\":\"ABSOLUTE\",\"subsidyProportion\":\"\",\"subsidyCalculateType\":\"SINGLE_PERCENT\",\"subsidyPercentFee\":\"0.6\",\"subsidyFixedFee\":\"\",\"subsidySingleMaxFee\":\"\"}]");
 //        request.setAgreementId("agreementId_example");
 //        request.setCreditOrderId("creditOrderId_example");
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> promotion = new HashMap<>();
+        promotion.put("type", "CUSTOM_ALLOWANCE");
+        list.add(promotion);
+
+        request.setYpPromotionInfo(JsonTool.toJson(list));
         try {
             PrePayResponse response = api.prePay(request);
             System.out.println(JsonTool.toJson(response));
@@ -99,7 +148,7 @@ public class OrderTest {
     }
 
     /**
-     * yibao
+     * 聚合支付生成聚合订单码
      * @param       
      * @return
      * @exception  
@@ -126,8 +175,7 @@ public class OrderTest {
 //        request.setCsUrl("csUrl_example");
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> promotion = new HashMap<>();
-        promotion.put("type", "CUSTOM_REDUCTION");
-        promotion.put("amount", 0.01);
+        promotion.put("type", "CUSTOM_ALLOWANCE");
         list.add(promotion);
 
         request.setYpPromotionInfo(JsonTool.toJson(list));
