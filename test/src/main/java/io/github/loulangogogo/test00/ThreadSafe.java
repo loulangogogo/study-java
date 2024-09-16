@@ -1,12 +1,10 @@
 package io.github.loulangogogo.test00;
 
-import io.gitee.loulan_yxq.owner.core.collection.CollTool;
+import io.github.loulangogogo.water.collection.CollTool;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /*********************************************************
  ** 线程安全

@@ -1,7 +1,7 @@
 package io.github.loulangogogo.test00;
 
-import io.gitee.loulan_yxq.owner.core.enums.MaskingDataTypeEnum;
-import io.gitee.loulan_yxq.owner.core.tool.StrTool;
+import io.github.loulangogogo.water.enums.MaskingDataTypeEnum;
+import io.github.loulangogogo.water.tool.StrTool;
 
 /*********************************************************
  ** 测试开闭原则

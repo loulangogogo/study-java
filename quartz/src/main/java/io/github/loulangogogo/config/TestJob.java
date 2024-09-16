@@ -1,14 +1,10 @@
 package io.github.loulangogogo.config;
 
-import io.gitee.loulan_yxq.owner.core.date.DateTool;
-import io.gitee.loulan_yxq.owner.core.date.LocalDateAndTimeFormatTool;
-import org.apache.poi.ss.formula.functions.T;
+import io.github.loulangogogo.water.date.LocalDateAndTimeFormatTool;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.time.LocalDateTime;
 
 public class TestJob implements Job {

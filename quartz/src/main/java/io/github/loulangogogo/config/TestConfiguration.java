@@ -1,15 +1,13 @@
 package io.github.loulangogogo.config;
 
-import io.gitee.loulan_yxq.owner.core.tool.IdTool;
+import io.github.loulangogogo.water.tool.IdTool;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Set;
 
 @Configuration
