@@ -1,4 +1,4 @@
-package io.github.loulangogogo;
+package io.github.loulangogogo.old;
 
 import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;

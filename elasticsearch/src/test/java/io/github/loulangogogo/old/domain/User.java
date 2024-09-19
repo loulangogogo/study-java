@@ -1,4 +1,4 @@
-package io.github.loulangogogo.domain;
+package io.github.loulangogogo.old.domain;
 
 import lombok.Data;
 

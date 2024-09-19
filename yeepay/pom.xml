@@ -19,6 +19,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.loulangogogo</groupId>
+            <artifactId>water-tool</artifactId>
+            <version>0.0.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.yeepay.yop.sdk</groupId>
             <artifactId>yop-java-sdk-biz</artifactId>
             <version>4.4.9</version>

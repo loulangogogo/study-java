@@ -1,12 +1,11 @@
-package io.github.loulangogogo.test;
+package io.github.loulangogogo.old.test;
 
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.github.loulangogogo.Connecting;
-import io.github.loulangogogo.domain.User;
-import lombok.extern.slf4j.Slf4j;
+import io.github.loulangogogo.old.Connecting;
+import io.github.loulangogogo.old.domain.User;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
