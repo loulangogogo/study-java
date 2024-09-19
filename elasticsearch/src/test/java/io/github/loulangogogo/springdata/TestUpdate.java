@@ -3,16 +3,16 @@ package io.github.loulangogogo.springdata;
 
 import io.github.loulangogogo.Main;
 import io.github.loulangogogo.enitty.DgUser;
+import io.github.loulangogogo.water.json.JsonTool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.elasticsearch.core.query.UpdateResponse;
 
 @SpringBootTest(classes = Main.class)
-public class TestAdd {
+public class TestUpdate {
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;
@@ -24,26 +24,10 @@ public class TestAdd {
         dgUser.setId(3L);
         dgUser.setAge(12);
         dgUser.setName("loulan");
-        dgUser.setPhone("18509376997");
+        dgUser.setPhone("123456789");
         dgUser.setAddress("china shanxi taiyuan");
 
-        DgUser save = elasticsearchOperations.save(dgUser);
-        System.out.println(save);
-    }
-
-    @Test
-    public void test02() {
-        List<DgUser> list = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            DgUser dgUser = new DgUser();
-            dgUser.setId((long)i);
-            dgUser.setAge(i);
-            dgUser.setName("loulan"+i);
-            dgUser.setPhone(""+i);
-            dgUser.setAddress("china shanxi taiyuan" + i);
-            list.add(dgUser);
-        }
-
-        elasticsearchOperations.save(list);
+        UpdateResponse update = elasticsearchOperations.update(dgUser);
+        System.out.println(JsonTool.toJson(update));
     }
 }
