@@ -22,7 +22,7 @@ public class TestUpdate {
     public void test01() {
         DgUser dgUser = new DgUser();
         dgUser.setId(3L);
-        dgUser.setAge(12);
+        dgUser.setAge(12L);
         dgUser.setName("loulan");
         dgUser.setPhone("123456789");
         dgUser.setAddress("china shanxi taiyuan");

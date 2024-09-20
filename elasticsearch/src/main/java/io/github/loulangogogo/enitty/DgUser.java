@@ -12,12 +12,16 @@ public class DgUser {
     @Id
     private Long id;
 
-    private Integer age;
+    @Field(type = FieldType.Long)
+    private Long age;
 
     @Field(analyzer = "ik_max_word",type = FieldType.Text)
     private String name;
 
+    @Field(type = FieldType.Text)
     private String address;
+
+    @Field(type = FieldType.Text)
     private String phone;
 
 }

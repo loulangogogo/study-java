@@ -22,7 +22,7 @@ public class TestAdd {
     public void test01() {
         DgUser dgUser = new DgUser();
         dgUser.setId(3L);
-        dgUser.setAge(12);
+        dgUser.setAge(12L);
         dgUser.setName("loulan");
         dgUser.setPhone("18509376997");
         dgUser.setAddress("china shanxi taiyuan");
@@ -33,17 +33,20 @@ public class TestAdd {
 
     @Test
     public void test02() {
-        List<DgUser> list = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            DgUser dgUser = new DgUser();
-            dgUser.setId((long)i);
-            dgUser.setAge(i);
-            dgUser.setName("loulan"+i);
-            dgUser.setPhone(""+i);
-            dgUser.setAddress("china shanxi taiyuan" + i);
-            list.add(dgUser);
+        List<Long> list = new ArrayList<>();
+        for (long i = 0; i < 30000; i++) {
+            list.add(i);
         }
 
-        elasticsearchOperations.save(list);
+        list.parallelStream().forEach(i->{
+            DgUser dgUser = new DgUser();
+            dgUser.setId(i);
+            dgUser.setAge(i);
+            dgUser.setName("loulan");
+            dgUser.setPhone(""+i);
+            dgUser.setAddress("china shanxi taiyuan" + i);
+            elasticsearchOperations.save(dgUser);
+            dgUser = null;
+        });
     }
 }
