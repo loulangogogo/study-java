@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TestDY {
     public static void main(String[] args) {
         Dog dog = new Dog("小黑", "black");
+        log.info("123456789");
 
         IdogBehavior dogBehavior = dog;
         IdogProperty dogProperty = dog;
