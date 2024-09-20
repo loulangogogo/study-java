@@ -1,7 +1,5 @@
 package io.github.loulangogogo.test08;
 
-import org.apache.poi.ss.formula.functions.T;
-
 /*********************************************************
  ** 测试适配器模式
  ** <br><br>

@@ -1,5 +1,7 @@
 package io.github.loulangogogo.test00;
 
+import lombok.extern.slf4j.Slf4j;
+
 /*********************************************************
  ** 测试单一职责原则
  ** <br><br>
@@ -7,9 +9,11 @@ package io.github.loulangogogo.test00;
  ** @author loulan
  ** @version 0.0.0
  *********************************************************/
+@Slf4j
 public class TestDY {
     public static void main(String[] args) {
         Dog dog = new Dog("小黑", "black");
+        log.info("asdf");
 
         IdogBehavior dogBehavior = dog;
         IdogProperty dogProperty = dog;
