@@ -2,8 +2,8 @@
 
 spring:
   elasticsearch:
-    uris: 192.168.2.82:9200
+    uris: 192.168.2.83:9200
     username: elastic
-    password: qePD9oDEqvB7cRn*QgGG
+    password: 701777
 server:
   port: 8085

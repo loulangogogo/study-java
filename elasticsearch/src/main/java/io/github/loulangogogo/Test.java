@@ -3,9 +3,10 @@ package io.github.loulangogogo;
 import io.github.loulangogogo.entity.DgUser;
 import io.github.loulangogogo.mapper.DgUserMapper;
 import io.github.loulangogogo.water.json.JsonTool;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 
 @Configuration
@@ -14,7 +15,7 @@ public class Test {
     @Autowired
     private DgUserMapper userMapper;
 
-//    @PostConstruct
+    @PostConstruct
     public void test() {
         DgUser user = new DgUser();
         user.setId(1L);
@@ -26,7 +27,7 @@ public class Test {
         System.out.println(JsonTool.toJson(save));
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void test02() {
         userMapper.findAll().forEach(o->{
             System.out.println(JsonTool.toJson(o));
